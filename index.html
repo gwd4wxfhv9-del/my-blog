@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Блог</title>
+    <style>
+    :root {
+    /* макет */
+    --width: 900px;
+
+    /* типографика */
+    --font-main: Verdana, sans-serif;
+    --font-secondary: Verdana, sans-serif;
+    --font-scale: 1em;
+
+    /* цвета (светлая тема) */
+    --bg: #fdfdfd;
+    --text: #1f1f1f;
+
+    --heading-color: #222;
+    --text-color: #444;
+    --link-color: #3273dc;
+    --visited-color: #8b6fcb;
+
+    --code-background-color: #f2f2f2;
+    --code-color: #222;
+    --blockquote-color: #222;
+
+    /* блоки заметок */
+    --note-bg: #ffffff;
+    --note-blue: #0f7ac9;
+    --note-pink: #e03b8e;
+    --note-orange: #f46c20;
+
+    /* стеклянная кнопка */
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-text: #1c1c1e;
+    --glass-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* тёмная тема */
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0b232d;
+        --text: #e6eef2;
+
+        --heading-color: #eee;
+        --text-color: #ddd;
+        --link-color: #8cc2dd;
+
+        --note-bg: #1c1c1e;
+        --note-blue: #3f86c9;
+        --note-pink: #c94f8a;
+        --note-orange: #c77745;
+
+        --glass-bg: rgba(30, 30, 40, 0.55);
+        --glass-border: rgba(255, 255, 255, 0.12);
+        --glass-text: rgba(255, 255, 255, 0.9);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .note-content {
+        color: rgba(255, 255, 255, 0.85);
+    }
+}
+
+/* ==================== ОСНОВА ==================== */
+
+body {
+    margin: auto;
+    padding: 20px;
+    max-width: var(--width);
+
+    font-family: var(--font-secondary);
+    font-size: var(--font-scale);
+    line-height: 1.5;
+
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+/* ==================== БЛОК ЗАМЕТОК ==================== */
+
+.note-block {
+    margin: 0 12px 28px; /* Те самые отступы, чтобы блоки не липли */
+    background: var(--note-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12); /* == box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); == */
+    position: relative;
+    overflow: visible;
+}
+
+@media (prefers-color-scheme: dark) {
+    .note-block {
+        box-shadow: 0 4px 15px rgba(0,0,0,0.35);
+    }
+}
+
+/* Общие стили заголовков (Light Theme) */
+h2.note-blue,
+h2.note-pink,
+h2.note-orange {
+    margin: 0;
+    padding: 14px 20px;
+    font-size: 1.15rem;
+    font-weight: 600 !important;
+    border-radius: 12px 12px 0 0;
+    border: 9px;
+    box-shadow: none;
+    
+    color: #1a1a1c !important;
+    text-shadow: none !important;
+  
+    background-blend-mode: soft-light; /* Смешивает градиент с белым фоном */
+    filter: contrast(0.96) saturate(0.75); /* Снижает резкость и насыщенность */
+}
+
+/* --- ТЕПЛЫЕ И ЧИСТЫЕ ГРАДИЕНТЫ --- */
+
+h2.note-blue { background: linear-gradient(90deg, #f9f1c0 0%, #f9f1c0 20%, #fdfbf0 100%) !important; }
+
+/* 2. Насыщенный Персик — от насыщенного к светлому */
+h2.note-pink { 
+    background: linear-gradient(90deg, #f7d8b4 0%, #fbe9e3 80%, #fbe9e3 100%) !important; 
+}
+
+/* 3. Фиолетовый (бывший оранжевый) — от насыщенного к светлому */
+h2.note-orange { 
+    background: linear-gradient(90deg, #e1ddec 0%, #f3f0f7 80%, #f3f0f7 100%) !important; 
+}
+
+/* --- ТЕМНАЯ ТЕМА: ГЛУБОКИЕ ГРАДИЕНТЫ --- */
+@media (prefers-color-scheme: dark) {
+    h2.note-blue, h2.note-pink, h2.note-orange {
+        color: #ffffff !important;
+        /* Мягкое свечение текста для темной темы */
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.2); 
+        font-weight: 600;
+    }
+
+    /* Синий: Глубокий океан с осветлением в конце */
+    h2.note-blue {
+        background: linear-gradient(90deg, #2c3e50 0%, #4a69bd 100%) !important;
+    }
+
+    /* Розовый: Темное вино с осветлением в конце */
+    h2.note-pink {
+        background: linear-gradient(90deg, #4b134f 0%, #c04851 100%) !important;
+    }
+
+    /* Оранжевый: Жженый кирпич / Темная медь */
+    h2.note-orange {
+        background: linear-gradient(90deg, #5d4037 0%, #d35400 100%) !important;
+    }
+}
+
+/* Содержимое блока */
+.note-content {
+    padding: 18px 20px;
+    background: var(--note-bg);
+    border-radius: 0 0 12px 12px;
+}
+
+/* фиксация отступов */
+
+.note-content > *:first-child {
+    margin-top: 0 !important;
+}
+
+.note-content > *:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* ==================== АККОРДЕОН ==================== */
+
+details {
+    margin-bottom: 28px;
+}
+
+summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 14px 28px;
+    border-radius: 9999px;
+
+    font-family: system-ui, -apple-system, "Trebuchet MS", sans-serif;
+    font-size: 0.97rem;
+    font-weight: 600;
+
+    color: var(--glass-text);
+
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+
+    backdrop-filter: blur(22px) saturate(180%);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+
+    box-shadow:
+        var(--glass-shadow),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+
+    transition: transform 0.2s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+    user-select: none;
+}
+
+summary:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+        0 10px 35px rgba(0,0,0,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.75);
+}
+
+summary:active {
+    transform: scale(0.98);
+}
+
+/* скрытие кнопки при открытии */
+
+details[open] summary {
+    display: none;
+}
+
+/* анимация */
+
+.accordion-content {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+details[open] .accordion-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==================== ТИПОГРАФИКА ==================== */
+
+h1 {
+    margin: 0 0 20px;
+    padding: 6px 10px;
+
+    font-weight: 600;
+    color: var(--heading-color);
+
+    border-bottom: 6px solid transparent;
+
+    /* Растягиваем градиент на обе рамки */
+    border-image: linear-gradient(
+        90deg,
+        #e1ddec,
+        #f7d8b4,
+        #f9f1c0
+    ) 1;
+    
+    /* Дополнительно: убери стандартные рамки по бокам, если они появятся */
+    border-left: none;
+    border-right: none;
+}
+@media (prefers-color-scheme: dark) {
+    h1 {
+        color: var(--heading-color);
+
+        border-bottom: 6px solid transparent;
+        border-image: linear-gradient(
+            90deg,
+            #3f86c9 0%,    /* Чистый синий акцент */
+            #c94f8a 50%,   /* Сочный розовый (вместо темного вина) */
+            #f46c20 100%   /* Твой оригинальный оранжевый (финиш) */
+        ) 1;
+    }
+}
+
+/* ==================== АДАПТИВНОСТЬ ==================== */
+
+@media (max-width: 768px) {
+    body {
+        padding: 12px;
+    }
+
+    .note-block {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    summary {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+
+    h1 {
+        line-height: 1.1 !important; /* Уменьшаем межстрочный интервал */
+        padding-top: 10px !important;   /* Можно чуть поджать внутренние отступы */
+        padding-bottom: 10px !important;
+        font-size: 1.6rem !important;    /* Если хочешь, чтобы и сам шрифт был чуть меньше */
+    }
+}
+
+/* ==================== СКРЫТИЕ ЭЛЕМЕНТОВ ==================== */
+
+nav,
+footer,
+.post-nav,
+.upvote-button,
+.title,
+.date,
+.post-date,
+time {
+    display: none !important;
+}
+
+/* Современная полоса чтения на чистом CSS */
+
+/* --- 1. СВЕТЛАЯ ТЕМА (Базовые стили) --- */
+.reading-progress-bar {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 4px;
+ z-index: 99999;
+  
+ /* Градиент: от лаванды к глубокой ежевике на правом краю */
+ background: linear-gradient(90deg, #e1ddec 0%, #3a3552 50%, #4b3052 100%); 
+  
+ /* Магия: привязываем анимацию к скроллу страницы */
+ transform-origin: 0 50%;
+ animation: scroll-progress auto linear;
+ animation-timeline: scroll();
+}
+
+/* --- 2. ТЕМНАЯ ТЕМА --- */
+@media (prefers-color-scheme: dark) {
+ .reading-progress-bar {
+      /* Яркий и плотный градиент от ежевики к оранжевому */
+      background: linear-gradient(90deg, #4b3052 0%, #ff8c00 100%) !important;
+      
+      /* Убираем свечение полностью */
+      box-shadow: none !important;
+      
+      /* Можно чуть увеличить высоту, чтобы полоса была весомее без тени */
+      height: 4px !important;
+  }
+}
+
+/* --- 3. АНИМАЦИИ И ФИКСЫ --- */
+@keyframes scroll-progress {
+ from { transform: scaleX(0); }
+ to { transform: scaleX(1); }
+}
+
+/* Для Safari и старых браузеров (запасной вариант) */
+@keyframes progress-scroll {
+    from { background-size: 0% 100%; }
+    to { background-size: 100% 100%; }
+}
+
+/* Фикс для Safari: прячем полосу, если браузер не поддерживает скролл-анимацию, 
+   чтобы она не висела статично на 100% */
+@supports not (animation-timeline: scroll()) {
+    .reading-progress-bar {
+        display: none;
+    }
+}
+
+/* Ультимативное скрытие скроллбара для ПК */
+
+/* 1. Делаем его невидимым и нулевым по размеру (Chrome, Safari, Edge) */
+*::-webkit-scrollbar {
+    width: 0px !important;
+    height: 0px !important;
+    background: transparent !important;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: transparent !important;
+}
+
+/* 2. Для Firefox */
+html, body {
+    scrollbar-width: none !important;
+    /* Убедимся, что скролл не «прыгает» при скрытии */
+    scrollbar-gutter: none !important; 
+}
+
+/* 3. Маскируем для всех остальных */
+* {
+    -ms-overflow-style: none !important;
+}
+
+/* Оформление классических сносок Markdown */
+sup a {
+    text-decoration: none;
+    font-size: 0.8em;
+    font-weight: bold;
+    padding: 0 2px;
+    background: none !important; /* Чтобы не было блюра и теней */
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Стили для списка сносок в самом низу */
+.footnotes {
+    font-size: 0.9em;
+    opacity: 0.8;
+    border-top: 1px solid #eee;
+    margin-top: 50px;
+}
+
+/* ВОТ ТУТ МЫ ЗАДАЕМ ВЫСОТУ ПРОБЕЛА */
+.spacer {
+    height: 25px; /* ИЗМЕНЯЙТЕ ЭТУ ЦИФРУ */
+    width: 100%;
+}
+    </style>
+</head>
+<body>
+
+    <div class="reading-progress-bar"></div>
+
+<h1>Скажите беспокойствам «нет»</h1>
+
+<div class="narrow-text">
+Современная жизнь полна неопределённости и лишена стабильности. Всё больше людей отмечают, что уровень стресса в их жизни растёт. Вот лишь некоторые жизненные ситуации, которые вызывают стресс: 
+
+<ul>
+  <li>развод, смерть близкого человека</li>
+  <li>серьёзное заболевание, несчастный случай</li>
+  <li>преступление</li>
+  <li>лихорадочный темп жизни</li>
+  <li>природные или антропогенные катастрофы</li>
+  <li>психологическое давление в школе или на работе</li>
+  <li>переживания по поводу трудоустройства и материального благополучия</li>
+</ul>
+
+Хотя стресса нам не избежать, с ним можно справиться или хотя бы снизить его. Здесь приводятся простые, но рабочие методы.
+</div>
+
+<div class="spacer"></div>
+
+<div class="note-block">
+<h2 class="note-blue">Живите сегодняшним днём 🌦️</h2>
+<div class="note-content">  
+Один психолог сказал: «Никогда не беспокойтесь о завтрашнем дне, так как завтра будут свои беспокойства».<sup id="ref1"><a href="#fn1" style="text-decoration:none;color:#3273dc;font-weight:bold;">1</a></sup> Другими словами, полностью исключить стресс невозможно. Но не стоит переживать о том, что ещё не произошло, а может и вовсе не случится. Стресс часто усиливается из‑за наших мыслей. Лучше сосредоточьтесь на том, что вы в силах сделать, а не на том, чего не можете изменить.
+</div>
+</div>
+
+<div class="note-block">
+<h2 class="note-pink">Будьте реалистичны в ожиданиях 🎯</h2>
+<div class="note-content">  
+Избегайте перфекционизма — это прямой путь к выгоранию. Например, не требуйте невозможного: учитывайте пределы как своих возможностей, так и возможностей других. Когда что-то идёт не по плану, не забывайте про юмор — он поможет снизить напряжение и поднимет настроение.
+</div>
+</div>
+
+<div class="note-block"> 
+<h2 class="note-orange">Лучше узнайте себя 🔍</h2>
+<div class="note-content"> 
+Негативные эмоции мешают ясно мыслить. Поэтому сохраняйте спокойствие. Для этого:
+<ul>
+  <li>Отслеживайте, что именно вызывает у вас стресс и как вы на него реагируете: о чем думаете, что чувствуете, как ведёте себя.</li>
+  <li>Записывайте наблюдения.</li>
+</ul>
+
+<h4>Два полезных приёма:</h4>
+<ul>
+  <li>Не приписывайте людям плохие мотивы. Попробуйте поберечь свои эмоции и найти безобидное объяснение поведению, которое вам не нравится?</li>
+  <li>Смотрите шире: будет ли ваша проблема так же серьезна завтра, а через неделю?</li>
+</ul>
+</div>
+</div>
+
+<details class="glass">
+<summary>Читать до конца</summary>
+<div class="accordion-content">
+
+<div class="note-block"> 
+<h2 class="note-blue">Будьте организованными 📅</h2>
+<div class="note-content"> 
+Когда в жизни есть порядок, мы чувствуем себя спокойнее. А спешка и ощущение, что ничего не успеваешь, усиливают стресс.
+Что может помочь:
+<ul>
+  <li>Не откладывайте дела на потом.</li>
+  <li>Составьте реалистичный график и придерживайтесь его.</li>
+  <li>Определите, что мешает выполнять дела вовремя, и устраните эти препятствия.</li>
+</ul>
+</div>
+</div>
+
+<div class="note-block"> 
+<h2 class="note-pink">Избегайте крайностей ⚖️</h2>
+<div class="note-content">
+Один писатель заметил: «Лучше горсть покоя, чем две горсти тяжелого труда».
+Время сейчас нестабильное, но старайтесь не зацикливаться на работе и деньгах. Иначе у вас может не остаться ни времени ни сил, чтобы порадоваться результатам своей работы.
+<ul>
+  <li>Работайте, но не превращайте жизнь в бесконечный марафон. Обязательно отдыхайте. Отдавайте предпочтение активному отдыху и хорошему сну.</li>
+  <li>Живите по средствам — это снижает напряжение. Правило «больше денег — меньше стресса» не всегда работает.</li>
+</ul>
+</div>
+</div>
+
+<div class="note-block"> 
+<h2 class="note-orange">Укрепляйте здоровье 🚴🏻</h2>
+<div class="note-content">
+Регулярная физическая активность улучшает настроение и делает организм устойчивее к стрессу.
+<ul>
+  <li>Двигайтесь, регулярно и полноценно питайтесь, высыпайтесь.</li>
+  <li>Алкоголь, сигареты или препараты как способ «снять напряжение», в долгосрочной перспективе подорвут ваше здоровье и лишат заработанных денег, что в свою очередь усилит стресс.</li>
+  <li>Если стресс становится слишком сильным, обратитесь к специалисту.</li>
+</ul>
+</div>
+</div>
+
+<div class="note-block">
+<h2 class="note-blue">Чётко определите цели ✅</h2>
+<div class="note-content">  
+Один мудрый человек сказал: «[Выбирайте] то, что действительно важно». 
+<p>Стоит проверять, не расходуем ли мы себя на неважное в ущерб важному. Для этого составьте список дел и расположите их по степени важности. Так вы поймёте, какими делами нужно заняться в первую очередь, а какие можно отложить, поручить кому-то другому или вовсе вычеркнуть из списка. В течение недели проследите, на что уходит время. Затем подумайте, как использовать его более рационально. Чем лучше вы распоряжаетесь временем, тем меньше стресса вы ощущаете. Не забывайте про короткие перерывы.</p>
+</div>
+</div>
+
+<div class="note-block">
+<h2 class="note-pink">Ищите поддержки 💬</h2>
+<div class="note-content">  
+Добрые, полные сочувствия слова других могут придать сил. Поговорите о проблеме с тем, кому доверяете, кто чуток и отзывчив. Такой разговор может помочь вам успокоиться, взглянуть на ситуацию по-иному или даже найти решение. Не зря говорят: «Беспокойство подавляет человека, а доброе слово радует его». 
+</div>
+</div>
+
+</div>
+</details>
+
+<div style="margin-top: 50px; padding-top: 15px; border-top: 1px solid rgba(128,128,128,0.2); font-size: 0.9em;">
+    <p id="fn1" style="display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;">
+        <a href="#ref1" style="text-decoration: none; color: var(--link-color); font-size: 1.2em; font-weight: 900; background: rgba(50, 115, 220, 0.1); padding: 2px 5px; border-radius: 4px;">↑</a> 
+        <span>1 - источник цитат в статье: Св. Писание</span>
+    </p>
+</div>
+
+</body>
+</html>
